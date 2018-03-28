@@ -12,7 +12,7 @@ function populateButtons(searchArray, classToAdd, areaToAddTo) {
         a.addClass(classToAdd);
         a.attr('data-type', searchArray[i]);
         a.text(searchArray[i]);
-        $(areaToAddTo).prepend(a);
+        $(areaToAddTo).append(a);
     }
 }
 
@@ -29,8 +29,13 @@ $(document).on('click','.searchButton', function(){
                 var searchDiv = $('<div class="search-item">');
                 var rating = response.data[j].rating;
                 var p = $('<p>').text("Rating: " + rating);
+
                 var animated = response.data[j].images.fixed_height.url;
+                console.log('animated: ' + animated);
+                
                 var still = response.data[j].images.fixed_height_still.url;
+                console.log('still: ' + still);
+
                 var image = $('<img>');
                 image.attr('src', still);
                 image.attr('data-still', still);
@@ -44,13 +49,16 @@ $(document).on('click','.searchButton', function(){
         })
 })
 
-$(document).on('click', '.searchImage',function(){
-    var state = $('this').attr('data-state');
+$(document).on('click', '.searchImage', function() { 
+    var state = $(this).attr('data-state');
     if (state === 'still') {
-        $(this).attr('src', $(this).data('animated'))
+        console.log('state = still');
+        $(this).attr('src', $(this).attr('data-animated'))
         $(this).attr('data-state', 'animated')
+
     } else {
-        $(this).attr('src', $(this).data('still'))
+        console.log('state != still');
+        $(this).attr('src', $(this).attr('data-still'))
         $(this).attr('data-state', 'still')
     }
 })
@@ -59,7 +67,7 @@ $(document).on('click', '.searchImage',function(){
 $('#addSearch').on('click', function(event) {
     event.preventDefault();
 
-    var newSearch = $('input').eq(0).val();
+    var newSearch = $('input').eq(0).val(); 
     console.log(newSearch);
     
     searchArray.push(newSearch);
